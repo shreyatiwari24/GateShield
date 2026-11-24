@@ -1,7 +1,7 @@
 const express = require('express');
 
 const app = express();
-const PORT = process.env.BACKEND_PORT || 4000;
+const PORT = process.env.PORT || process.env.BACKEND_PORT || 10000;
 
 app.use(express.json());
 
@@ -45,6 +45,6 @@ app.get('/orders', (req, res) => {
   res.json(orders);
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`GateShield backend service running on port ${PORT}`);
 });
