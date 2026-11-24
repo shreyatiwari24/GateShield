@@ -1,7 +1,6 @@
 # GateShield — High-Performance API Gateway & Resilience Engine
 
 [![CI/CD](https://github.com/yourusername/gateshield/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/gateshield/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](docker-compose.yml)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?logo=node.js&logoColor=white)](gateway/package.json)
 [![C++](https://img.shields.io/badge/C++-17-00599C?logo=c%2B%2B&logoColor=white)](rate-limiter/)
@@ -318,6 +317,4 @@ All previously noted issues from the initial codebase review were systematically
 
 ---
 
-## License
 
-This project is licensed under the MIT License.
