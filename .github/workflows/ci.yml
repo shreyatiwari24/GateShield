@@ -9,14 +9,14 @@ on:
 jobs:
   # ---- C++ Rate Limiter Tests ----
   cpp-tests:
-    runs-on: ubuntu-latest
+  runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
       - name: Install C++ dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ pkg-config libhiredis-dev libboost-all-dev
+          sudo apt-get install -y cmake g++ pkg-config libhiredis-dev libboost-all-dev libboost-system-dev
 
       - name: Build and run C++ tests
         working-directory: rate-limiter
