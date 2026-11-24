@@ -12,7 +12,7 @@ const serviceRegistry = require('./services/serviceRegistry');
 const healthMonitor = require('./services/healthMonitor');
 
 const app = express();
-const PORT = process.env.GATEWAY_PORT || 3000;
+const PORT = process.env.PORT || process.env.GATEWAY_PORT || 10000;
 
 // Enable Cross-Origin Resource Sharing (CORS) with configurable origins
 const corsOptions = {
