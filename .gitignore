@@ -43,3 +43,8 @@ Makefile
 *.pem
 *.key
 /secrets/
+
+# Database backups
+backups/
+
+.env.production

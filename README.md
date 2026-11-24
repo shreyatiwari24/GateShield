@@ -194,8 +194,7 @@ Measured against the live HTTP loopback pipeline (`Client` $\to$ `Gateway (3000)
 | **Alpha Corp** | `test-key-alpha` | Token Bucket | Capacity: 10, Refill: 0.17/s |
 | **Beta Labs** | `test-key-beta` | Fixed Window | 20 requests / 60 seconds |
 | **Gamma Dev** | `test-key-gamma` | Sliding Window | 15 requests / 60 seconds |
-| **Admin User** | `admin` / `admin123` | Role: `admin` | Full system governance |
-
+| **Demo User** | `demo` | Role: `viewer` | Read-only dashboard access |
 ---
 
 ## Quick Start & Local Setup
@@ -231,7 +230,7 @@ curl http://localhost:4000/health
 ```
 
 ### 4. Access UIs
-- **React Dashboard:** [http://localhost:5173](http://localhost:5173) (Login: `admin` / `admin123`)
+- **React Dashboard:** [http://localhost:5173](http://localhost:5173) (Use configured demo viewer credentials)
 - **Jaeger Tracing UI:** [http://localhost:16686](http://localhost:16686)
 
 ---

@@ -19,8 +19,8 @@ services:
     container_name: gateshield-jaeger-prod
     networks:
       - gateshield-internal
-    ports:
-      - "${JAEGER_UI_PORT:-16686}:16686"
+    # ports:
+    #   - "${JAEGER_UI_PORT:-16686}:16686"
     restart: always
     deploy:
       resources:
@@ -125,23 +125,25 @@ services:
       - "${GATEWAY_PORT:-3000}:3000"
     environment:
       NODE_ENV: production
+      STRICT_SECURITY: "true"
       GATEWAY_PORT: 3000
       RATE_LIMITER_URL: http://rate-limiter:8081
       BACKEND_URL: http://backend:4000
       PG_HOST: postgres
       PG_PORT: 5432
       PG_USER: ${PG_USER:-gateshield}
-      PG_PASSWORD: ${PG_PASSWORD:?Database password required}
+      PG_PASSWORD: ${PG_PASSWORD:?PG_PASSWORD is required}
       PG_DATABASE: ${PG_DATABASE:-gateshield}
-      JWT_SECRET: ${JWT_SECRET:?JWT secret required}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
-      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+      CORS_ORIGIN: ${CORS_ORIGIN:?CORS_ORIGIN is required}
       OTEL_SERVICE_NAME: gateshield-gateway
       OTEL_TRACES_EXPORTER: otlp
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
       OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
       OTEL_LOG_LEVEL: info
       OTEL_METRICS_EXPORTER: none
+      
     networks:
       - gateshield-internal
     depends_on:

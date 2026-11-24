@@ -54,9 +54,3 @@ FROM api_clients c
 CROSS JOIN backend_services s
 WHERE c.id IN (1, 2, 3)
 ON CONFLICT (client_id, service_id) DO NOTHING;
-
--- Admin User (Feature 6): default admin account
--- Password: admin123 (bcrypt hash pre-computed)
-INSERT INTO admin_users (username, password_hash, role)
-VALUES ('admin', '$2b$10$rICGqrMcVoJlNcv.v4j4UOhldpMVcmWjHQ6kZ7M5HBsQfKBfSK6Ym', 'admin')
-ON CONFLICT (username) DO NOTHING;
