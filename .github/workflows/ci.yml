@@ -1,3 +1,4 @@
+
 name: GateShield CI/CD
 
 on:
@@ -6,10 +7,13 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   # ---- C++ Rate Limiter Tests ----
   cpp-tests:
-  runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -36,7 +40,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
+          cache: npm
           cache-dependency-path: gateway/package-lock.json
 
       - name: Install and test
@@ -72,7 +76,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
+          cache: npm
           cache-dependency-path: dashboard/package-lock.json
 
       - name: Build dashboard
@@ -84,11 +88,16 @@ jobs:
   # ---- Docker Build & Integration Tests ----
   integration:
     runs-on: ubuntu-latest
-    needs: [cpp-tests, gateway-tests, backend-verify, dashboard-build]
+    needs:
+      - cpp-tests
+      - gateway-tests
+      - backend-verify
+      - dashboard-build
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js for runner probes
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -109,17 +118,14 @@ jobs:
 
       - name: Test API key authentication
         run: |
-          # Valid key should return 200 or 429
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "X-API-Key: test-key-alpha" http://localhost:3000/api/products)
           echo "Valid key response: $STATUS"
           [ "$STATUS" = "200" ] || [ "$STATUS" = "429" ]
 
-          # Missing key should return 401
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/products)
           echo "Missing key response: $STATUS"
           [ "$STATUS" = "401" ]
 
-          # Invalid key should return 403
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "X-API-Key: invalid-key" http://localhost:3000/api/products)
           echo "Invalid key response: $STATUS"
           [ "$STATUS" = "403" ]
@@ -129,23 +135,27 @@ jobs:
           TOKEN=$(curl -sf -X POST http://localhost:3000/admin/auth/login \
             -H "Content-Type: application/json" \
             -d '{"username":"admin","password":"admin123"}' | jq -r .token)
-          echo "Admin login successful, token received"
+
+          echo "Admin login successful"
           [ -n "$TOKEN" ] && [ "$TOKEN" != "null" ]
 
-          # Use token to fetch stats
           curl -sf -H "Authorization: Bearer $TOKEN" http://localhost:3000/admin/stats | jq .
-
-          # Fetch services
           curl -sf -H "Authorization: Bearer $TOKEN" http://localhost:3000/admin/services | jq .
 
       - name: Test rate limiting
         run: |
           RATE_LIMITED=0
+
           for i in $(seq 1 20); do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "X-API-Key: test-key-alpha" http://localhost:3000/api/products)
-            [ "$STATUS" = "429" ] && RATE_LIMITED=1 && break
+            if [ "$STATUS" = "429" ]; then
+              RATE_LIMITED=1
+              break
+            fi
           done
+
           echo "Rate limiting enforced: $RATE_LIMITED"
+          [ "$RATE_LIMITED" = "1" ]
 
       - name: Run load test
         run: |
