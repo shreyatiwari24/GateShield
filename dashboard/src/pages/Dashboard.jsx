@@ -50,12 +50,20 @@ export default function Dashboard() {
       if (!isMountedRef.current) return
       console.error('Failed to fetch dashboard data:', err)
       if (isInitial || !lastRefreshed) {
-        setError(
-          err.response?.data?.message ||
-            err.response?.data?.error ||
-            err.message ||
-            'Unable to connect to gateway administration service'
-        )
+        const rawError =
+  err.response?.data?.message ??
+  err.response?.data?.error
+
+const safeError =
+  typeof rawError === 'string'
+    ? rawError
+    : typeof rawError?.message === 'string'
+      ? rawError.message
+      : typeof err.message === 'string'
+        ? err.message
+        : 'Unable to connect to gateway administration service'
+
+setError(safeError)
       }
     } finally {
       if (isMountedRef.current && isInitial) {
