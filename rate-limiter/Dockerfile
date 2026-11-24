@@ -7,20 +7,21 @@ RUN apt-get update && apt-get install -y \
     git \
     pkg-config \
     libhiredis-dev \
-    libboost-all-dev
+    libasio-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY . .
 
-RUN mkdir build && cd build && cmake -DBUILD_TESTS=OFF .. && make -j$(nproc)
+RUN mkdir build && cd build && \
+    cmake -DBUILD_TESTS=OFF .. && \
+    make -j$(nproc)
 
 FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y \
     curl \
     libhiredis-dev \
-    libboost-system1.74.0 \
-    libboost-date-time1.74.0 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
