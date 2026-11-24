@@ -1,0 +1,13 @@
+{
+  "name": "gateshield-backend",
+  "version": "1.0.0",
+  "description": "GateShield Sample Backend - demo APIs for products, users, orders",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Build outputs
+dist/
+build/
+rate-limiter/build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+build-error.txt
+
+# Docker
+docker-compose.override.yml
+
+# C++ build artifacts
+*.o
+*.obj
+*.exe
+*.out
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Sensitive files
+*.pem
+*.key
+/secrets/
